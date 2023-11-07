@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://noda.io/api/includes/noda.js"></script>
+    <script src="./UIFunctions.js"></script>
+    <script src="./AzureDevOps.js"></script>
+
+    <title>Noda & Azure DevOps Adaptor Proof of Concept</title>
+
+    <style>
+        h1 {font-size:medium}
+        body {padding:20px}
+        .node-form  label {display: inline-block; width: 28%}
+        .link-form  label {display: inline-block; width: 32%}
+        .status.error {background-color: rgb(241, 169, 169);}
+        .status.success {background-color: rgb(189, 235, 189);}
+        .status {margin: 15px 0; padding: 10px; background-color: bisque; height: 75px; overflow-y:auto;}
+        .status p {margin-bottom: 0;}
+        .status span {font-size: 80%; font-weight: bold;}
+        .events {margin: 15px 0; padding: 10px; background-color: blanchedalmond; height: 527px; overflow-y:auto;}
+        .events #eventsMessage {font-family: monospace; font-size: 85%;}
+        .crud-form { padding: 15px; background-color:aliceblue}
+        .crud-form input[type='button'] {margin-right: 10}
+        .map-form {margin-top: 15px}
+        
+        div.crud-form p {margin-bottom: .9rem}
+
+        #nodeColor {width: 5em;}
+        #nodeShape {width: 7em;}
+        #nodeRelativeTo {width:6em;}        
+        #linkColor {width:6em;}        
+        #linkShape {width:6em;}
+
+        #nodeSelected {margin-right:100px}
+    </style>
+</head>
+
+<body>
+    <h1>Noda Web API Test (User: <span id="userId"></span>)</h1>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">
+
+                <div class="crud-form node-form">
+
+                    <h4>Graph Settings</h4>
+
+                    <p>
+                        <label for="xOffset">Horizontal Offsets:</label><input id="xOffset" type="range" min="200" max="1000" step="10" value="320" onchange="setXOffset(this.value)" /><span id="xOffsetText"></span><br>
+                        <label for="yOffset">Vertical Offsets:</label><input id="yOffset" type="range" min="200" max="1000" step="10" value="420" onchange="setYOffset(this.value)"/><span id="yOffsetText"></span><br>
+                    </p>
+
+                    <h2>Azure DevOps</h2>
+
+                    <h4>Work Items by Project/Team/Sprint</h4>
+                    <p>
+                        <label for="organization">Organization:</label>
+                        <span id="organization"></span>
+                    </p>
+
+                    <p>
+                        <label for="project">Project:</label>
+                        <select id="project">
+                            <option name="None" value="">None</option>
+                        </select>
+                    </p>
+
+
+                    <p>
+                        <label for="team">Team:</label>
+                        <select id="team" onchange="onTeamChange()">
+                            <option name="None" value="">None</option>
+                        </select>
+                    </p>
+
+                    <p>
+                        <label for="sprint">Sprint:</label>
+                        <select id="sprint">
+                            <option value="">None</option>
+                        </select>
+                    </p>
+
+                    <p>
+                        <input type="button" value="Make Map" onclick="getWorkItemBySelection()" />
+                    </p>
+
+                    <h4>Work Items by Query</h4>
+
+                    <p>
+                        <label for="query">Query:</label>
+                        <select id="query">
+                            <option value="">None</option>
+                        </select>
+                    </p>
+
+                    <p>
+                        <input type="button" value="Make Map by Query" onclick="getWorkItemByQuery()" />
+                    </p>
+                </div>
+
+
+                <div class="crud-form map-form">
+                    <h4>Noda Functions</h4>
+
+                    <p>
+                        <input type="button" value="Save Map" onclick="saveMap()" />
+                        <input type="button" value="Load Map" onclick="loadMap()" />
+                        <input type="button" value="Clear Map" onclick="clearMap()" />
+                        <input type="button" value="List Nodes" onclick="listNodes()" />
+                        <input type="button" value="List Links" onclick="listLinks()" />
+                        <input type="button" value="Refresh DropDowns" onclick="refreshMetaData()" />
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="col-6" >
+                <div id="status" class="status success"><p>Status: <span id="statusMessage"></span></p></div>
+
+                <div id="events" class="events"><p>Events: <span style="float:right;margin-right:10px"><a href="#" onclick="clearEvents()">Clear</a></span><br/><span id="eventsMessage"></span></p></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

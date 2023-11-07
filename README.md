@@ -5,6 +5,23 @@ You should be aware of Noda.io, a VR graph and information modeling software.  W
 
 ## Known Issues
 The java server code is using a Java Library "AzD" for interfacing Azure.
+https://github.com/hkarthik7/azure-devops-java-sdk
+
+You will need to establish or have access to an Azure DevOps instance, with some work items established.
+This tool expect the 'Agile' workflow template to be enabled, but you have the ability to 
+remap any specialized cards or workflow in the AzureDevOps.js code.  You will need to establish a Azure 
+Personal Access Token for the server bridge to communicate with Azure, it needs to have access to your 
+agile boards, teams and backlog.
+
+Ensure the token has the following permissions set.
+![Azure DevOps WorkItems](documentation/azure-personal-access-token-workitems.png "Azure DevOps work items permission")
+
+![Azure DevOps Teams](documentation/azure-personal-access-token-teams.png "Azure DevOps work items permission")
+
+
+Modify the ```src/main/resources/application.properties``` to include the generated Personal Access Token
+your organization name and primary project name.
+
 
 ## Architecture
 
@@ -47,6 +64,9 @@ note:
 The Noda Bridge html/js may not work to completion as it relies on services that exist only in the in-application browser.
 
 note:
-The Noda Bridge auto refreshes the data & maps for dropdowns from the sever, but will not in a debug environment.
+The Noda Bridge auto refreshes the data & maps for dropdowns from the sever, but will not in a non vr environment.
+
+
+## Example of the Tool running in VR
 
 
